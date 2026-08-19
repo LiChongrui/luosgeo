@@ -2,498 +2,621 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>七夕 · 我喜欢你</title>
     <style>
+        /* === 全局重置 & 基础 === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            background: #fcf4f7;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 30% 40%, #fcf4f7 0%, #f5e6ed 50%, #f0e0e8 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        .container {
-            width: 100%;
-            max-width: 1280px;
             padding: 20px;
         }
-        svg {
+
+        /* === 卡片容器 — 纯CSS实现，无SVG === */
+        .card {
             width: 100%;
-            height: auto;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background: rgba(255, 245, 248, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 60px;
+            border: 1.5px solid rgba(255, 220, 235, 0.5);
+            box-shadow: 0 20px 60px rgba(180, 100, 130, 0.12);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: clamp(20px, 4vw, 60px);
+            transition: all 0.2s;
+        }
+
+        /* === 背景装饰 — 纯CSS绘制 === */
+
+        /* 光晕 */
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(255, 150, 180, 0.15) 0%, transparent 70%);
+            animation: glowPulse 5s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes glowPulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+
+        /* 漂浮爱心 — 左上 */
+        .heart-float-1 {
+            position: absolute;
+            top: 6%;
+            left: 4%;
+            font-size: clamp(40px, 6vw, 80px);
+            opacity: 0.12;
+            color: #f5a0b8;
+            animation: floatHeart1 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes floatHeart1 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(20px, -30px) rotate(10deg); }
+            66% { transform: translate(-10px, 20px) rotate(-8deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        /* 漂浮爱心 — 右下 */
+        .heart-float-2 {
+            position: absolute;
+            bottom: 6%;
+            right: 3%;
+            font-size: clamp(50px, 8vw, 110px);
+            opacity: 0.10;
+            color: #f7b8c8;
+            animation: floatHeart2 24s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes floatHeart2 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-25px, 15px) rotate(-12deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        /* 星星群 — 左 */
+        .stars-left {
+            position: absolute;
+            left: 6%;
+            top: 25%;
+            font-size: clamp(18px, 2.5vw, 36px);
+            color: #f7d0b0;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: starSpin1 14s linear infinite;
+        }
+        @keyframes starSpin1 {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .stars-right {
+            position: absolute;
+            right: 6%;
+            top: 20%;
+            font-size: clamp(16px, 2.2vw, 32px);
+            color: #f7d0b0;
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+            animation: starSpin2 16s linear infinite;
+        }
+        @keyframes starSpin2 {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(-180deg) scale(1.15); }
+            100% { transform: rotate(-360deg) scale(1); }
+        }
+
+        /* 云朵 */
+        .cloud-left {
+            position: absolute;
+            left: 5%;
+            top: 12%;
+            font-size: clamp(50px, 8vw, 120px);
+            color: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            z-index: 0;
+            animation: cloudMove1 30s ease-in-out infinite;
+        }
+        @keyframes cloudMove1 {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(40px); }
+            100% { transform: translateX(0); }
+        }
+
+        .cloud-right {
+            position: absolute;
+            right: 5%;
+            bottom: 15%;
+            font-size: clamp(60px, 9vw, 140px);
+            color: rgba(255, 255, 255, 0.12);
+            pointer-events: none;
+            z-index: 0;
+            animation: cloudMove2 32s ease-in-out infinite;
+        }
+        @keyframes cloudMove2 {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-30px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* 花朵装饰 */
+        .flower-left {
+            position: absolute;
+            left: 8%;
+            bottom: 22%;
+            font-size: clamp(30px, 4vw, 60px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+            animation: flowerSway1 16s ease-in-out infinite;
+        }
+        @keyframes flowerSway1 {
+            0% { transform: rotate(-8deg) translate(0, 0); }
+            50% { transform: rotate(12deg) translate(8px, -10px); }
+            100% { transform: rotate(-8deg) translate(0, 0); }
+        }
+
+        .flower-right {
+            position: absolute;
+            right: 7%;
+            bottom: 30%;
+            font-size: clamp(28px, 3.8vw, 55px);
+            opacity: 0.10;
+            pointer-events: none;
+            z-index: 0;
+            animation: flowerSway2 19s ease-in-out infinite;
+        }
+        @keyframes flowerSway2 {
+            0% { transform: rotate(12deg) translate(0, 0); }
+            50% { transform: rotate(-10deg) translate(-6px, 12px); }
+            100% { transform: rotate(12deg) translate(0, 0); }
+        }
+
+        /* 小爱心散落 */
+        .heart-scatter {
+            position: absolute;
+            font-size: clamp(20px, 2.8vw, 40px);
+            opacity: 0.06;
+            color: #f5a0b8;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .heart-scatter:nth-child(1) { top: 55%; left: 14%; animation: floatScatter1 15s ease-in-out infinite; }
+        .heart-scatter:nth-child(2) { top: 50%; right: 12%; animation: floatScatter2 17s ease-in-out infinite; }
+        .heart-scatter:nth-child(3) { bottom: 38%; left: 45%; animation: floatScatter3 19s ease-in-out infinite; }
+        .heart-scatter:nth-child(4) { top: 30%; left: 25%; animation: floatScatter4 13s ease-in-out infinite; }
+        .heart-scatter:nth-child(5) { bottom: 20%; right: 28%; animation: floatScatter5 21s ease-in-out infinite; }
+
+        @keyframes floatScatter1 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(12px,-18px) rotate(20deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes floatScatter2 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-15px,20px) rotate(-15deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes floatScatter3 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(18px,-12px) rotate(25deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes floatScatter4 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-10px,16px) rotate(-20deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes floatScatter5 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-14px) rotate(18deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+
+        /* === 内容区域 (z-index 高于装饰) === */
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            gap: clamp(4px, 0.8vh, 12px);
+        }
+
+        /* === 顶部装饰 === */
+        .top-ornaments {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(12px, 2vw, 28px);
+            flex-wrap: wrap;
+            font-size: clamp(20px, 2.8vw, 44px);
+            opacity: 0.6;
+            margin-bottom: clamp(2px, 0.4vh, 8px);
+        }
+        .top-ornaments .heart-icon {
+            color: #f28aa8;
+            animation: pulseHeart 2.4s ease-in-out infinite;
+        }
+        @keyframes pulseHeart {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        /* === 主标题 === */
+        .title-qixi {
+            font-size: clamp(40px, 8vw, 96px);
+            font-weight: 700;
+            letter-spacing: clamp(8px, 1.6vw, 20px);
+            background: linear-gradient(135deg, #f5a0b8, #f7b8c8, #f0b0c0);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleShimmer 6s ease-in-out infinite alternate;
+            line-height: 1.1;
+            text-shadow: 0 4px 40px rgba(240, 150, 180, 0.15);
+        }
+        @keyframes titleShimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* === 副标题 === */
+        .sub-greeting {
+            font-size: clamp(12px, 1.4vw, 18px);
+            font-weight: 300;
+            color: #b3889a;
+            background: rgba(255, 220, 235, 0.30);
+            padding: clamp(4px, 0.6vh, 10px) clamp(16px, 3vw, 40px);
+            border-radius: 80px;
+            border: 1px solid rgba(255, 200, 215, 0.25);
+            letter-spacing: clamp(4px, 0.8vw, 10px);
+            display: inline-block;
+            backdrop-filter: blur(2px);
+            margin-bottom: clamp(2px, 0.3vh, 6px);
+        }
+
+        /* === 告白语 === */
+        .confession {
+            font-size: clamp(36px, 6.5vw, 80px);
+            font-weight: 700;
+            letter-spacing: clamp(8px, 1.2vw, 16px);
+            background: linear-gradient(135deg, #f58aa8, #f06a90, #e8557a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: confessionGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 60px rgba(235, 80, 120, 0.1);
+        }
+        @keyframes confessionGlow {
+            0% { background-position: 0% 50%; filter: drop-shadow(0 0 20px rgba(255, 59, 127, 0.15)); }
+            100% { background-position: 100% 50%; filter: drop-shadow(0 0 40px rgba(255, 59, 127, 0.25)); }
+        }
+
+        /* 告白语两侧装饰 (纯CSS) */
+        .confession::before {
+            content: '☁️';
+            position: absolute;
+            left: clamp(-40px, -5vw, -70px);
+            top: clamp(-20px, -2vw, -30px);
+            font-size: clamp(24px, 3vw, 40px);
+            opacity: 0.35;
+            animation: cloudFloat 5s ease-in-out infinite alternate;
+        }
+        .confession::after {
+            content: '🌸';
+            position: absolute;
+            right: clamp(-44px, -5.5vw, -76px);
+            bottom: clamp(-16px, -2vw, -24px);
+            font-size: clamp(26px, 3.2vw, 44px);
+            opacity: 0.35;
+            animation: flowerFloat 6s ease-in-out infinite alternate;
+        }
+        @keyframes cloudFloat {
+            0% { transform: translateY(0) scale(0.9); opacity: 0.25; }
+            100% { transform: translateY(-12px) scale(1.1); opacity: 0.5; }
+        }
+        @keyframes flowerFloat {
+            0% { transform: rotate(-6deg) scale(0.9); opacity: 0.25; }
+            100% { transform: rotate(12deg) scale(1.1); opacity: 0.5; }
+        }
+
+        /* === 爱心雨 === */
+        .falling-hearts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(8px, 1.2vw, 20px);
+            font-size: clamp(20px, 3vw, 42px);
+            margin: clamp(6px, 1vh, 16px) 0;
+            filter: drop-shadow(0 4px 20px rgba(255, 130, 170, 0.08));
+        }
+        .falling-hearts span {
+            display: inline-block;
+            animation: heartFloat 4.2s ease-in-out infinite alternate;
+        }
+        .falling-hearts span:nth-child(1) { animation-delay: 0s; }
+        .falling-hearts span:nth-child(2) { animation-delay: 0.4s; }
+        .falling-hearts span:nth-child(3) { animation-delay: 0.9s; }
+        .falling-hearts span:nth-child(4) { animation-delay: 1.5s; }
+        .falling-hearts span:nth-child(5) { animation-delay: 0.6s; }
+        .falling-hearts span:nth-child(6) { animation-delay: 2.0s; }
+        .falling-hearts span:nth-child(7) { animation-delay: 1.2s; }
+        .falling-hearts span:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(8px) scale(0.85) rotate(-6deg); opacity: 0.5; }
+            100% { transform: translateY(-14px) scale(1.1) rotate(8deg); opacity: 1; }
+        }
+
+        /* === 诗句卡片 === */
+        .poem-card {
+            background: rgba(255, 240, 245, 0.40);
+            backdrop-filter: blur(4px);
+            border-radius: 80px;
+            padding: clamp(10px, 1.2vh, 18px) clamp(20px, 3vw, 40px);
+            border: 1px solid rgba(255, 200, 215, 0.2);
+            box-shadow: 0 8px 28px rgba(200, 140, 170, 0.04);
+            max-width: 92%;
+            margin: clamp(4px, 0.5vh, 10px) 0;
+        }
+        .poem-line {
+            font-size: clamp(14px, 1.6vw, 22px);
+            color: #7a5f6b;
+            letter-spacing: clamp(2px, 0.3vw, 4px);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        .poem-line i {
+            font-style: normal;
+            color: #d47a96;
+            font-weight: 400;
+        }
+        .poem-line small {
             display: block;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(180, 100, 130, 0.15);
+            margin-top: 2px;
+            font-size: clamp(10px, 1.1vw, 15px);
+            opacity: 0.6;
+            letter-spacing: clamp(3px, 0.4vw, 5px);
+            color: #b28a98;
+        }
+
+        /* === 牛郎织女 === */
+        .lovers {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(12px, 2vw, 30px);
+            flex-wrap: wrap;
+            margin: clamp(4px, 0.5vh, 10px) 0;
+        }
+        .lover-item {
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 0.8vw, 12px);
+            background: rgba(255, 230, 240, 0.30);
+            padding: clamp(4px, 0.5vh, 8px) clamp(14px, 2vw, 28px);
+            border-radius: 80px;
+            border: 1px solid rgba(255, 200, 215, 0.15);
+            backdrop-filter: blur(2px);
+            color: #7a5f6b;
+            font-size: clamp(12px, 1.2vw, 18px);
+            transition: all 0.2s;
+            cursor: default;
+        }
+        .lover-item:hover {
+            background: rgba(255, 220, 235, 0.50);
+            transform: scale(1.03);
+        }
+        .lover-item .emoji {
+            font-size: clamp(20px, 2.2vw, 34px);
+        }
+        .lover-item.heart-bridge {
+            background: transparent;
+            border: none;
+            padding: 0 clamp(4px, 0.6vw, 10px);
+            font-size: clamp(28px, 3vw, 48px);
+            color: #f28aa8;
+            animation: pulseHeart 2.4s ease-in-out infinite;
+            cursor: default;
+        }
+        .lover-item.heart-bridge:hover {
+            transform: none;
+            background: transparent;
+        }
+
+        /* === 底部 === */
+        .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(2px, 0.3vh, 6px);
+            margin-top: clamp(6px, 0.8vh, 16px);
+        }
+        .date-tag {
+            font-size: clamp(10px, 1vw, 14px);
+            color: #b58a98;
+            background: rgba(255, 230, 240, 0.30);
+            padding: clamp(4px, 0.4vh, 8px) clamp(16px, 2.5vw, 32px);
+            border-radius: 80px;
+            letter-spacing: clamp(3px, 0.4vw, 6px);
+            border: 1px solid rgba(255, 200, 215, 0.15);
+            backdrop-filter: blur(2px);
+        }
+        .date-tag strong {
+            color: #d47a96;
+            font-weight: 400;
+        }
+        .motto {
+            font-size: clamp(10px, 0.9vw, 13px);
+            color: #b3929e;
+            letter-spacing: clamp(3px, 0.4vw, 6px);
+            opacity: 0.5;
+            border-top: 1px solid rgba(200, 150, 170, 0.10);
+            padding-top: clamp(6px, 0.6vh, 12px);
+            width: 60%;
+            text-align: center;
+        }
+
+        /* === 响应式：小屏微调 === */
+        @media (max-width: 640px) {
+            .card {
+                border-radius: 32px;
+                padding: 16px;
+            }
+            .confession::before,
+            .confession::after {
+                display: none;
+            }
+            .top-ornaments {
+                gap: 8px;
+            }
+            .lover-item .emoji {
+                font-size: 18px;
+            }
+            .lover-item.heart-bridge {
+                font-size: 24px;
+            }
+            .heart-scatter {
+                display: none;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .card {
+                border-radius: 20px;
+                padding: 10px;
+            }
+            .sub-greeting {
+                letter-spacing: 2px;
+                padding: 4px 12px;
+                font-size: 10px;
+            }
+            .lovers {
+                gap: 6px;
+            }
+            .lover-item {
+                padding: 3px 10px;
+                font-size: 10px;
+            }
+            .lover-item .emoji {
+                font-size: 14px;
+            }
+            .lover-item.heart-bridge {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 直接将 SVG 嵌入 HTML -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%" style="background: radial-gradient(ellipse at 30% 40%, #fcf4f7 0%, #f5e6ed 50%, #f0e0e8 100%); font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;">
-            <defs>
-                <!-- 渐变定义 -->
-                <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#f5a0b8"/>
-                    <stop offset="50%" stop-color="#f7b8c8"/>
-                    <stop offset="100%" stop-color="#f0b0c0"/>
-                </linearGradient>
-                <linearGradient id="confessionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#f58aa8">
-                        <animate attributeName="stop-color" values="#f58aa8;#f06a90;#e8557a;#f58aa8" dur="4s" repeatCount="indefinite"/>
-                    </stop>
-                    <stop offset="50%" stop-color="#f06a90">
-                        <animate attributeName="stop-color" values="#f06a90;#e8557a;#f58aa8;#f06a90" dur="4s" repeatCount="indefinite"/>
-                    </stop>
-                    <stop offset="100%" stop-color="#e8557a">
-                        <animate attributeName="stop-color" values="#e8557a;#f58aa8;#f06a90;#e8557a" dur="4s" repeatCount="indefinite"/>
-                    </stop>
-                </linearGradient>
-                <linearGradient id="subGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#b3889a"/>
-                    <stop offset="100%" stop-color="#d47a96"/>
-                </linearGradient>
-                <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="rgba(255,150,180,0.25)"/>
-                    <stop offset="100%" stop-color="rgba(255,150,180,0)"/>
-                </radialGradient>
-                <radialGradient id="bgGlow1" cx="20%" cy="30%" r="40%">
-                    <stop offset="0%" stop-color="rgba(255,200,215,0.15)"/>
-                    <stop offset="100%" stop-color="rgba(255,200,215,0)"/>
-                </radialGradient>
-                <radialGradient id="bgGlow2" cx="80%" cy="70%" r="35%">
-                    <stop offset="0%" stop-color="rgba(245,160,180,0.12)"/>
-                    <stop offset="100%" stop-color="rgba(245,160,180,0)"/>
-                </radialGradient>
-                <linearGradient id="boyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#b8a0b0"/>
-                    <stop offset="100%" stop-color="#8a7080"/>
-                </linearGradient>
-                <linearGradient id="girlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#e8a0b8"/>
-                    <stop offset="100%" stop-color="#c88098"/>
-                </linearGradient>
-                <radialGradient id="faceGrad" cx="50%" cy="40%" r="50%">
-                    <stop offset="0%" stop-color="#fff5f0"/>
-                    <stop offset="100%" stop-color="#f0ddd8"/>
-                </radialGradient>
-                
-                <!-- 滤镜 -->
-                <filter id="softShadow" x="-5%" y="-5%" width="110%" height="110%">
-                    <feDropShadow dx="0" dy="6" stdDeviation="20" flood-color="rgba(180,100,130,0.1)"/>
-                </filter>
-                <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="8" result="blur"/>
-                    <feMerge>
-                        <feMergeNode in="blur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-                <filter id="characterShadow">
-                    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(120,80,100,0.15)"/>
-                </filter>
-            </defs>
 
-            <!-- ===== 背景光晕 ===== -->
-            <rect width="1280" height="720" fill="url(#bgGlow1)"/>
-            <rect width="1280" height="720" fill="url(#bgGlow2)"/>
+    <div class="card">
 
-            <!-- ===== 背景装饰元素 ===== -->
+        <!-- ===== 纯CSS背景装饰 ===== -->
 
-            <!-- 大爱心 - 左上 -->
-            <g opacity="0.08">
-                <animateTransform attributeName="transform" type="translate" values="0,0;20,-30;-10,20;0,0" dur="20s" repeatCount="indefinite"/>
-                <path d="M80,55 C35,35 15,20 15,5 C15,-10 30,-15 45,-15 C55,-15 65,-8 70,0 C75,-8 85,-15 95,-15 C110,-15 125,-10 125,5 C125,20 105,35 80,55Z" fill="#f5a0b8" transform="translate(80,60) scale(1.6)"/>
-            </g>
+        <!-- 漂浮爱心 -->
+        <div class="heart-float-1">❤️</div>
+        <div class="heart-float-2">💗</div>
 
-            <!-- 大爱心 - 右下 -->
-            <g opacity="0.07">
-                <animateTransform attributeName="transform" type="translate" values="0,0;-25,15;15,-20;0,0" dur="24s" repeatCount="indefinite"/>
-                <path d="M80,55 C35,35 15,20 15,5 C15,-10 30,-15 45,-15 C55,-15 65,-8 70,0 C75,-8 85,-15 95,-15 C110,-15 125,-10 125,5 C125,20 105,35 80,55Z" fill="#f7b8c8" transform="translate(1080,540) scale(2.0)"/>
-            </g>
+        <!-- 星星 -->
+        <div class="stars-left">✦ ✧ ✦</div>
+        <div class="stars-right">✦ ✧ ✦</div>
 
-            <!-- 星星群 - 左 -->
-            <g opacity="0.15">
-                <g>
-                    <animateTransform attributeName="transform" type="rotate" values="0,150,180;25,150,180;0,150,180" dur="14s" repeatCount="indefinite"/>
-                    <polygon points="50,0 63,35 100,35 70,55 80,90 50,70 20,90 30,55 0,35 37,35" fill="#f7d0b0" transform="translate(120,150) scale(0.6)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="rotate" values="0,80,250;-20,80,250;0,80,250" dur="18s" repeatCount="indefinite"/>
-                    <polygon points="50,0 63,35 100,35 70,55 80,90 50,70 20,90 30,55 0,35 37,35" fill="#f7d0b0" transform="translate(60,240) scale(0.4)"/>
-                </g>
-            </g>
+        <!-- 云朵 -->
+        <div class="cloud-left">☁️</div>
+        <div class="cloud-right">☁️</div>
 
-            <!-- 星星群 - 右 -->
-            <g opacity="0.12">
-                <g>
-                    <animateTransform attributeName="transform" type="rotate" values="0,1100,180;-20,1100,180;0,1100,180" dur="16s" repeatCount="indefinite"/>
-                    <polygon points="50,0 63,35 100,35 70,55 80,90 50,70 20,90 30,55 0,35 37,35" fill="#f7d0b0" transform="translate(1080,160) scale(0.7)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="rotate" values="0,1150,280;15,1150,280;0,1150,280" dur="20s" repeatCount="indefinite"/>
-                    <polygon points="50,0 63,35 100,35 70,55 80,90 50,70 20,90 30,55 0,35 37,35" fill="#f7d0b0" transform="translate(1140,270) scale(0.5)"/>
-                </g>
-            </g>
+        <!-- 花朵 -->
+        <div class="flower-left">🌸</div>
+        <div class="flower-right">🌺</div>
 
-            <!-- 云朵 - 左 -->
-            <g opacity="0.12">
-                <animateTransform attributeName="transform" type="translate" values="0,0;40,0;0,0" dur="30s" repeatCount="indefinite"/>
-                <path d="M40,60 C10,60 0,45 0,30 C0,15 15,5 30,5 C35,0 50,0 60,10 C70,0 90,0 100,10 C110,0 130,0 140,10 C155,5 170,15 170,30 C170,45 160,60 130,60Z" fill="#ffffff" transform="translate(100,80) scale(1.0)"/>
-            </g>
+        <!-- 散落小爱心 -->
+        <div class="heart-scatter">💕</div>
+        <div class="heart-scatter">💗</div>
+        <div class="heart-scatter">💖</div>
+        <div class="heart-scatter">💝</div>
+        <div class="heart-scatter">💘</div>
 
-            <!-- 云朵 - 右 -->
-            <g opacity="0.10">
-                <animateTransform attributeName="transform" type="translate" values="0,0;-30,0;0,0" dur="32s" repeatCount="indefinite"/>
-                <path d="M40,60 C10,60 0,45 0,30 C0,15 15,5 30,5 C35,0 50,0 60,10 C70,0 90,0 100,10 C110,0 130,0 140,10 C155,5 170,15 170,30 C170,45 160,60 130,60Z" fill="#ffffff" transform="translate(920,560) scale(1.2)"/>
-            </g>
+        <!-- ===== 主要内容 ===== -->
+        <div class="content">
 
-            <!-- 花朵装饰 - 左 -->
-            <g opacity="0.12">
-                <animateTransform attributeName="transform" type="rotate" values="-15,180,480;20,180,480;-15,180,480" dur="16s" repeatCount="indefinite"/>
-                <circle cx="50" cy="30" r="14" fill="#fcc8d8"/>
-                <circle cx="30" cy="50" r="14" fill="#fcc8d8"/>
-                <circle cx="70" cy="50" r="14" fill="#fcc8d8"/>
-                <circle cx="40" cy="72" r="14" fill="#fcc8d8"/>
-                <circle cx="60" cy="72" r="14" fill="#fcc8d8"/>
-                <circle cx="50" cy="50" r="10" fill="#ffe0e8"/>
-                <animateTransform attributeName="transform" type="translate" values="0,0;10,-8;-5,5;0,0" dur="18s" repeatCount="indefinite" additive="sum"/>
-            </g>
+            <!-- 顶部装饰 -->
+            <div class="top-ornaments">
+                <span>✨</span>
+                <span>☁️</span>
+                <span class="heart-icon">💞</span>
+                <span>🌷</span>
+                <span>✨</span>
+            </div>
 
-            <!-- 花朵装饰 - 右 -->
-            <g opacity="0.10">
-                <animateTransform attributeName="transform" type="rotate" values="20,1120,420;-10,1120,420;20,1120,420" dur="19s" repeatCount="indefinite"/>
-                <circle cx="50" cy="30" r="16" fill="#fcc8d8"/>
-                <circle cx="30" cy="50" r="16" fill="#fcc8d8"/>
-                <circle cx="70" cy="50" r="16" fill="#fcc8d8"/>
-                <circle cx="40" cy="72" r="16" fill="#fcc8d8"/>
-                <circle cx="60" cy="72" r="16" fill="#fcc8d8"/>
-                <circle cx="50" cy="50" r="12" fill="#ffe0e8"/>
-                <animateTransform attributeName="transform" type="translate" values="0,0;-8,12;6,-6;0,0" dur="20s" repeatCount="indefinite" additive="sum"/>
-            </g>
+            <!-- 主标题 -->
+            <h1 class="title-qixi">七 夕</h1>
 
-            <!-- 小爱心群 - 散落 -->
-            <g opacity="0.08">
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;8,-12;-6,8;0,0" dur="15s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f5a0b8" transform="translate(200,400) scale(2.0)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;-10,15;5,-10;0,0" dur="17s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f7b8c8" transform="translate(980,380) scale(1.8)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;12,-8;-8,12;0,0" dur="19s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f0b0c0" transform="translate(580,580) scale(1.5)"/>
-                </g>
-            </g>
+            <!-- 副标题 -->
+            <div class="sub-greeting">✦ 星河为证 · 佳期如梦 ✦</div>
 
-            <!-- ===== 主卡片背景 ===== -->
-            <rect x="80" y="50" width="1120" height="620" rx="60" fill="rgba(255,245,248,0.55)" stroke="rgba(255,220,235,0.5)" stroke-width="1.5" filter="url(#softShadow)"/>
+            <!-- 告白语 -->
+            <div class="confession">我喜欢你</div>
 
-            <!-- 卡片内光晕 -->
-            <ellipse cx="640" cy="360" rx="480" ry="280" fill="url(#glowGrad)" opacity="0.3">
-                <animate attributeName="rx" values="480;500;480" dur="5s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.2;0.4;0.2" dur="5s" repeatCount="indefinite"/>
-            </ellipse>
+            <!-- 爱心雨 -->
+            <div class="falling-hearts">
+                <span>💖</span>
+                <span>🌸</span>
+                <span>💗</span>
+                <span>🌺</span>
+                <span>💕</span>
+                <span>💝</span>
+                <span>💘</span>
+                <span>🌷</span>
+            </div>
 
-            <!-- ===== 顶部装饰 ===== -->
-            <g transform="translate(640, 100)">
-                <!-- 星星 -->
-                <g transform="translate(-280, 0)">
-                    <polygon points="20,0 25,14 40,14 28,22 32,36 20,28 8,36 12,22 0,14 15,14" fill="#f7d0b0" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="0,20,18;30,20,18;0,20,18" dur="4s" repeatCount="indefinite"/>
-                    </polygon>
-                </g>
-                <!-- 云 -->
-                <g transform="translate(-220, -5)" opacity="0.4">
-                    <path d="M20,30 C5,30 0,22 0,15 C0,8 8,3 15,3 C18,0 25,0 30,5 C35,0 45,0 50,5 C55,3 65,8 65,15 C65,22 60,30 50,30Z" fill="#ffffff"/>
-                </g>
-                <!-- 鹊桥爱心 -->
-                <g transform="translate(-100, -5)">
-                    <path d="M30,50 C10,35 0,25 0,15 C0,5 10,0 20,0 C25,0 28,3 30,6 C32,3 35,0 40,0 C50,0 60,5 60,15 C60,25 50,35 30,50Z" fill="#f28aa8">
-                        <animate attributeName="opacity" values="0.6;1;0.6" dur="2.4s" repeatCount="indefinite"/>
-                        <animateTransform attributeName="transform" type="scale" values="1;1.12;1" dur="2.4s" repeatCount="indefinite" additive="sum"/>
-                    </path>
-                </g>
-                <!-- 花 -->
-                <g transform="translate(60, -5)" opacity="0.4">
-                    <circle cx="25" cy="15" r="8" fill="#fcc8d8"/>
-                    <circle cx="15" cy="25" r="8" fill="#fcc8d8"/>
-                    <circle cx="35" cy="25" r="8" fill="#fcc8d8"/>
-                    <circle cx="20" cy="36" r="8" fill="#fcc8d8"/>
-                    <circle cx="30" cy="36" r="8" fill="#fcc8d8"/>
-                    <circle cx="25" cy="25" r="6" fill="#ffe0e8"/>
-                </g>
-                <!-- 星星2 -->
-                <g transform="translate(140, 0)">
-                    <polygon points="20,0 25,14 40,14 28,22 32,36 20,28 8,36 12,22 0,14 15,14" fill="#f7d0b0" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="0,20,18;-25,20,18;0,20,18" dur="4.5s" repeatCount="indefinite"/>
-                    </polygon>
-                </g>
-                <!-- 星星3 -->
-                <g transform="translate(200, -8)">
-                    <polygon points="15,0 19,10 30,10 21,16 24,27 15,21 6,27 9,16 0,10 11,10" fill="#f7d0b0" opacity="0.3">
-                        <animateTransform attributeName="transform" type="rotate" values="0,15,13;20,15,13;0,15,13" dur="3.5s" repeatCount="indefinite"/>
-                    </polygon>
-                </g>
-            </g>
+            <!-- 诗句 -->
+            <div class="poem-card">
+                <div class="poem-line">
+                    <i>“ 两情若是久长时，又岂在朝朝暮暮。”</i>
+                    <small>—— 秦观 · 鹊桥仙</small>
+                </div>
+            </div>
 
-            <!-- ===== 主标题 ===== -->
-            <text x="640" y="200" text-anchor="middle" font-size="96" font-weight="700" letter-spacing="20" fill="url(#titleGrad)" filter="url(#glowFilter)">
-                七 夕
-                <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite"/>
-            </text>
+            <!-- 牛郎织女 -->
+            <div class="lovers">
+                <span class="lover-item">
+                    <span class="emoji">🐂</span> 牛郎
+                </span>
+                <span class="lover-item heart-bridge">🌉</span>
+                <span class="lover-item">
+                    <span class="emoji">🧚</span> 织女
+                </span>
+            </div>
 
-            <!-- ===== 副标题 ===== -->
-            <rect x="420" y="225" width="440" height="42" rx="21" fill="rgba(255,220,235,0.35)" stroke="rgba(255,200,215,0.25)" stroke-width="1"/>
-            <text x="640" y="252" text-anchor="middle" font-size="18" font-weight="300" fill="url(#subGrad)" letter-spacing="10">
-                ✦ 星河为证 · 佳期如梦 ✦
-            </text>
+            <!-- 底部 -->
+            <div class="footer">
+                <div class="date-tag">
+                    <strong>♡</strong> 2026 · 农历七月初七 <strong>♡</strong>
+                </div>
+                <div class="motto">
+                    愿我如星君如月 · 夜夜流光相皎洁
+                </div>
+            </div>
 
-            <!-- ===== 告白语 ===== -->
-            <text x="640" y="340" text-anchor="middle" font-size="80" font-weight="700" letter-spacing="16" fill="url(#confessionGrad)" filter="url(#glowFilter)">
-                我喜欢你
-                <animate attributeName="opacity" values="0.95;1;0.95" dur="2s" repeatCount="indefinite"/>
-            </text>
-
-            <!-- 告白语发光背景 -->
-            <ellipse cx="640" cy="325" rx="300" ry="50" fill="url(#glowGrad)" opacity="0.4">
-                <animate attributeName="rx" values="300;330;300" dur="3s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.3;0.5;0.3" dur="3s" repeatCount="indefinite"/>
-            </ellipse>
-
-            <!-- ===== 爱心雨 ===== -->
-            <g transform="translate(0, 0)">
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;-12,22;0,0" dur="3.8s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f58aa8" transform="translate(380, 370) scale(1.8)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;16,-18;0,0" dur="4.2s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#fcc8d8" transform="translate(480, 375) scale(1.5)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;-10,26;0,0" dur="4.8s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f06a90" transform="translate(580, 368) scale(2.0)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;18,-14;0,0" dur="5.0s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f5c0d0" transform="translate(700, 375) scale(1.4)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;-14,20;0,0" dur="4.0s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#e8557a" transform="translate(800, 370) scale(1.7)"/>
-                </g>
-                <g>
-                    <animateTransform attributeName="transform" type="translate" values="0,0;12,-20;0,0" dur="4.6s" repeatCount="indefinite"/>
-                    <path d="M12,18 C6,12 3,8 3,4 C3,0 6,-2 9,-2 C11,-2 12,0 13,1 C14,0 15,-2 17,-2 C20,-2 23,0 23,4 C23,8 20,12 12,18Z" fill="#f7b8c8" transform="translate(900, 373) scale(1.3)"/>
-                </g>
-            </g>
-
-            <!-- ===== 诗句卡片 ===== -->
-            <rect x="280" y="440" width="720" height="80" rx="40" fill="rgba(255,240,245,0.5)" stroke="rgba(255,200,215,0.25)" stroke-width="1"/>
-            <text x="640" y="472" text-anchor="middle" font-size="20" fill="#7a5f6b" letter-spacing="4" font-weight="300">
-                <tspan x="640" dy="0" fill="#d47a96" font-weight="400">“ 两情若是久长时，又岂在朝朝暮暮。”</tspan>
-                <tspan x="640" dy="26" font-size="15" fill="#b28a98" letter-spacing="5">—— 秦观 · 鹊桥仙</tspan>
-            </text>
-
-            <!-- ===== 牛郎织女 - 全新美化版 ===== -->
-            <g transform="translate(640, 555)">
-                
-                <!-- 牛郎 (左侧) -->
-                <g transform="translate(-230, 0)" filter="url(#characterShadow)">
-                    <!-- 背景光晕 -->
-                    <ellipse cx="0" cy="20" rx="80" ry="15" fill="rgba(180,140,160,0.08)"/>
-                    
-                    <!-- 身体 (古风长袍) -->
-                    <path d="M-20,45 L-15,25 L-5,20 L5,20 L15,25 L20,45 L15,50 L-15,50 Z" fill="url(#boyGrad)" opacity="0.9"/>
-                    <path d="M-8,25 L-12,15 L8,15 L12,25" fill="none" stroke="#c0a8b8" stroke-width="1.5"/>
-                    
-                    <!-- 衣领 -->
-                    <path d="M-5,20 L0,15 L5,20 L0,25 Z" fill="#d4c0d0"/>
-                    
-                    <!-- 头部 -->
-                    <ellipse cx="0" cy="5" rx="18" ry="20" fill="url(#faceGrad)"/>
-                    
-                    <!-- 头发 (古风发髻) -->
-                    <path d="M-18,0 Q-20,-10 -10,-15 Q-5,-18 0,-18 Q5,-18 10,-15 Q20,-10 18,0 Q10,-5 0,-5 Q-10,-5 -18,0 Z" fill="#5a4a50"/>
-                    <path d="M-12,-12 Q-8,-22 -2,-20 Q4,-18 8,-22 Q12,-12 8,-8 Q0,-12 -8,-8 Q-12,-12 -12,-12 Z" fill="#5a4a50"/>
-                    <!-- 发簪 -->
-                    <line x1="0" y1="-20" x2="0" y2="-28" stroke="#e8c8a0" stroke-width="2"/>
-                    <circle cx="0" cy="-28" r="3" fill="#e8c8a0"/>
-                    
-                    <!-- 眼睛 -->
-                    <ellipse cx="-6" cy="4" rx="3" ry="3.5" fill="#3a2a30"/>
-                    <ellipse cx="6" cy="4" rx="3" ry="3.5" fill="#3a2a30"/>
-                    <ellipse cx="-5" cy="3" rx="1.2" ry="1.2" fill="white"/>
-                    <ellipse cx="7" cy="3" rx="1.2" ry="1.2" fill="white"/>
-                    
-                    <!-- 眉毛 -->
-                    <path d="M-10,0 Q-7,-2 -4,0" fill="none" stroke="#4a3a40" stroke-width="1.5"/>
-                    <path d="M10,0 Q7,-2 4,0" fill="none" stroke="#4a3a40" stroke-width="1.5"/>
-                    
-                    <!-- 嘴巴 (微笑) -->
-                    <path d="M-3,10 Q0,13 3,10" fill="none" stroke="#c07080" stroke-width="1.5"/>
-                    
-                    <!-- 腮红 -->
-                    <ellipse cx="-10" cy="8" rx="4" ry="2.5" fill="rgba(200,120,140,0.2)"/>
-                    <ellipse cx="10" cy="8" rx="4" ry="2.5" fill="rgba(200,120,140,0.2)"/>
-                    
-                    <!-- 手臂 (拱手礼) -->
-                    <path d="M-12,28 Q-20,22 -18,16 Q-16,12 -14,16" fill="url(#faceGrad)" stroke="#d0b8c0" stroke-width="1"/>
-                    <path d="M12,28 Q20,22 18,16 Q16,12 14,16" fill="url(#faceGrad)" stroke="#d0b8c0" stroke-width="1"/>
-                    
-                    <!-- 飘带 (增加古风感) -->
-                    <path d="M-15,35 Q-30,40 -25,55 Q-20,60 -18,50" fill="none" stroke="#c8a8b8" stroke-width="2" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="-2,0,40;2,0,40;-2,0,40" dur="3s" repeatCount="indefinite"/>
-                    </path>
-                    <path d="M15,35 Q30,40 25,55 Q20,60 18,50" fill="none" stroke="#c8a8b8" stroke-width="2" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="2,0,40;-2,0,40;2,0,40" dur="3.2s" repeatCount="indefinite"/>
-                    </path>
-                    
-                    <!-- 标签 -->
-                    <rect x="-30" y="52" width="60" height="22" rx="11" fill="rgba(255,240,245,0.5)" stroke="rgba(255,200,215,0.2)" stroke-width="1"/>
-                    <text x="0" y="67" text-anchor="middle" font-size="13" fill="#7a5f6b" font-weight="400">牛郎</text>
-                </g>
-
-                <!-- 鹊桥 (中间) - 更浪漫的桥 -->
-                <g transform="translate(0, -5)">
-                    <!-- 桥体弧线 -->
-                    <path d="M-60,35 Q-30,10 0,5 Q30,10 60,35" fill="none" stroke="rgba(200,150,170,0.3)" stroke-width="20"/>
-                    <path d="M-60,35 Q-30,10 0,5 Q30,10 60,35" fill="none" stroke="rgba(220,180,200,0.4)" stroke-width="12"/>
-                    <path d="M-60,35 Q-30,10 0,5 Q30,10 60,35" fill="none" stroke="#f0d0d8" stroke-width="3"/>
-                    
-                    <!-- 桥上的星星装饰 -->
-                    <g>
-                        <animateTransform attributeName="transform" type="translate" values="0,0;0,-8;0,0" dur="2.5s" repeatCount="indefinite"/>
-                        <circle cx="-30" cy="12" r="4" fill="#f7d0b0" opacity="0.8"/>
-                        <circle cx="0" cy="5" r="5" fill="#f7d0b0" opacity="0.9"/>
-                        <circle cx="30" cy="12" r="4" fill="#f7d0b0" opacity="0.8"/>
-                    </g>
-                    
-                    <!-- 桥上的爱心 -->
-                    <g>
-                        <animateTransform attributeName="transform" type="scale" values="1;1.2;1" dur="2s" repeatCount="indefinite" additive="sum"/>
-                        <path d="M-8,14 C-12,10 -14,6 -14,2 C-14,-2 -10,-4 -6,-4 C-4,-4 -2,-2 0,0 C2,-2 4,-4 6,-4 C10,-4 14,-2 14,2 C14,6 12,10 8,14 L0,22 Z" fill="#f28aa8" transform="translate(0,-8) scale(0.7)" opacity="0.7"/>
-                    </g>
-                    
-                    <!-- 喜鹊 (简化可爱版) -->
-                    <g transform="translate(-20, -8)">
-                        <animateTransform attributeName="transform" type="translate" values="-20,-8;-18,-12;-20,-8" dur="3s" repeatCount="indefinite"/>
-                        <ellipse cx="0" cy="0" rx="8" ry="6" fill="#5a4a50"/>
-                        <circle cx="-5" cy="-2" r="4" fill="#4a3a40"/>
-                        <circle cx="-7" cy="-3" r="1.5" fill="white"/>
-                        <circle cx="-7" cy="-3" r="0.8" fill="#3a2a30"/>
-                        <path d="M-9,-2 L-12,-4 L-9,-3" fill="#e8c8a0"/>
-                        <path d="M4,0 Q8,-4 10,-2" fill="none" stroke="#5a4a50" stroke-width="1.5"/>
-                        <path d="M4,2 Q8,4 10,2" fill="none" stroke="#5a4a50" stroke-width="1.5"/>
-                    </g>
-                    <g transform="translate(20, -10)">
-                        <animateTransform attributeName="transform" type="translate" values="20,-10;18,-14;20,-10" dur="3.5s" repeatCount="indefinite"/>
-                        <ellipse cx="0" cy="0" rx="7" ry="5" fill="#5a4a50"/>
-                        <circle cx="-4" cy="-2" r="3.5" fill="#4a3a40"/>
-                        <circle cx="-6" cy="-3" r="1.3" fill="white"/>
-                        <circle cx="-6" cy="-3" r="0.7" fill="#3a2a30"/>
-                        <path d="M-8,-2 L-10,-3.5 L-8,-2.5" fill="#e8c8a0"/>
-                        <path d="M3,0 Q6,-3 8,-1.5" fill="none" stroke="#5a4a50" stroke-width="1.2"/>
-                        <path d="M3,1.5 Q6,3 8,1.5" fill="none" stroke="#5a4a50" stroke-width="1.2"/>
-                    </g>
-                </g>
-
-                <!-- 织女 (右侧) -->
-                <g transform="translate(230, 0)" filter="url(#characterShadow)">
-                    <!-- 背景光晕 -->
-                    <ellipse cx="0" cy="20" rx="80" ry="15" fill="rgba(200,120,150,0.08)"/>
-                    
-                    <!-- 身体 (飘逸长裙) -->
-                    <path d="M-18,45 L-12,25 L-3,20 L3,20 L12,25 L18,45 L12,52 L-12,52 Z" fill="url(#girlGrad)" opacity="0.9"/>
-                    <!-- 裙摆飘带 -->
-                    <path d="M-12,50 Q-20,55 -18,60 Q-14,65 -8,55" fill="rgba(200,120,150,0.3)">
-                        <animateTransform attributeName="transform" type="rotate" values="-3,0,50;3,0,50;-3,0,50" dur="3.5s" repeatCount="indefinite"/>
-                    </path>
-                    <path d="M12,50 Q20,55 18,60 Q14,65 8,55" fill="rgba(200,120,150,0.3)">
-                        <animateTransform attributeName="transform" type="rotate" values="3,0,50;-3,0,50;3,0,50" dur="3.8s" repeatCount="indefinite"/>
-                    </path>
-                    
-                    <!-- 衣领 (交领) -->
-                    <path d="M-4,20 L0,14 L4,20 L0,26 Z" fill="#e8c8d8"/>
-                    
-                    <!-- 头部 -->
-                    <ellipse cx="0" cy="5" rx="17" ry="19" fill="url(#faceGrad)"/>
-                    
-                    <!-- 头发 (古风发髻 + 发饰) -->
-                    <path d="M-17,-2 Q-19,-12 -8,-18 Q-3,-20 0,-20 Q3,-20 8,-18 Q19,-12 17,-2 Q10,-6 0,-6 Q-10,-6 -17,-2 Z" fill="#4a3a40"/>
-                    <!-- 发髻 -->
-                    <path d="M-8,-16 Q-6,-24 -2,-22 Q2,-20 6,-24 Q8,-16 4,-14 Q0,-16 -4,-14 Q-8,-16 -8,-16 Z" fill="#4a3a40"/>
-                    <!-- 发簪 -->
-                    <line x1="-2" y1="-22" x2="-8" y2="-30" stroke="#e8c8a0" stroke-width="2"/>
-                    <line x1="2" y1="-22" x2="8" y2="-30" stroke="#e8c8a0" stroke-width="2"/>
-                    <circle cx="-8" cy="-30" r="2.5" fill="#f0a0b0"/>
-                    <circle cx="8" cy="-30" r="2.5" fill="#f0a0b0"/>
-                    <!-- 头花 -->
-                    <circle cx="-4" cy="-26" r="3" fill="#fcc8d8"/>
-                    <circle cx="0" cy="-28" r="3" fill="#fcc8d8"/>
-                    <circle cx="4" cy="-26" r="3" fill="#fcc8d8"/>
-                    
-                    <!-- 眼睛 (大眼可爱风格) -->
-                    <ellipse cx="-5" cy="4" rx="3.5" ry="4" fill="#3a2a30"/>
-                    <ellipse cx="5" cy="4" rx="3.5" ry="4" fill="#3a2a30"/>
-                    <ellipse cx="-4.5" cy="3" rx="1.5" ry="1.5" fill="white"/>
-                    <ellipse cx="5.5" cy="3" rx="1.5" ry="1.5" fill="white"/>
-                    <ellipse cx="-5" cy="5" rx="0.8" ry="0.8" fill="white" opacity="0.5"/>
-                    <ellipse cx="5" cy="5" rx="0.8" ry="0.8" fill="white" opacity="0.5"/>
-                    
-                    <!-- 睫毛 -->
-                    <path d="M-9,0 Q-7,-1 -3,1" fill="none" stroke="#3a2a30" stroke-width="0.8"/>
-                    <path d="M9,0 Q7,-1 3,1" fill="none" stroke="#3a2a30" stroke-width="0.8"/>
-                    
-                    <!-- 眉毛 -->
-                    <path d="M-9,-1 Q-6,-3 -3,-1" fill="none" stroke="#4a3a40" stroke-width="1.2"/>
-                    <path d="M9,-1 Q6,-3 3,-1" fill="none" stroke="#4a3a40" stroke-width="1.2"/>
-                    
-                    <!-- 嘴巴 (微笑) -->
-                    <path d="M-3,10 Q0,13.5 3,10" fill="none" stroke="#c07080" stroke-width="1.5"/>
-                    
-                    <!-- 腮红 -->
-                    <ellipse cx="-9" cy="8" rx="4.5" ry="3" fill="rgba(200,120,140,0.25)"/>
-                    <ellipse cx="9" cy="8" rx="4.5" ry="3" fill="rgba(200,120,140,0.25)"/>
-                    
-                    <!-- 手臂 (优雅手势) -->
-                    <path d="M-10,28 Q-18,22 -16,16 Q-14,12 -12,16" fill="url(#faceGrad)" stroke="#d0b8c0" stroke-width="1"/>
-                    <path d="M10,28 Q18,22 16,16 Q14,12 12,16" fill="url(#faceGrad)" stroke="#d0b8c0" stroke-width="1"/>
-                    
-                    <!-- 飘带 -->
-                    <path d="M-14,35 Q-28,42 -22,58 Q-18,65 -16,55" fill="none" stroke="#e8b0c8" stroke-width="2.5" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="-3,0,40;3,0,40;-3,0,40" dur="3.3s" repeatCount="indefinite"/>
-                    </path>
-                    <path d="M14,35 Q28,42 22,58 Q18,65 16,55" fill="none" stroke="#e8b0c8" stroke-width="2.5" opacity="0.5">
-                        <animateTransform attributeName="transform" type="rotate" values="3,0,40;-3,0,40;3,0,40" dur="3.6s" repeatCount="indefinite"/>
-                    </path>
-                    
-                    <!-- 标签 -->
-                    <rect x="-30" y="52" width="60" height="22" rx="11" fill="rgba(255,240,245,0.5)" stroke="rgba(255,200,215,0.2)" stroke-width="1"/>
-                    <text x="0" y="67" text-anchor="middle" font-size="13" fill="#7a5f6b" font-weight="400">织女</text>
-                </g>
-            </g>
-
-            <!-- ===== 底部信息 ===== -->
-            <rect x="490" y="625" width="300" height="32" rx="16" fill="rgba(255,230,240,0.35)" stroke="rgba(255,200,215,0.15)" stroke-width="1"/>
-            <text x="640" y="646" text-anchor="middle" font-size="14" fill="#b58a98" letter-spacing="5">
-                <tspan fill="#d47a96" font-weight="400">♡</tspan> 2026 · 农历七月初七 <tspan fill="#d47a96" font-weight="400">♡</tspan>
-            </text>
-
-            <!-- 底部小字 -->
-            <text x="640" y="700" text-anchor="middle" font-size="13" fill="#b3929e" letter-spacing="6" opacity="0.5">
-                愿我如星君如月 · 夜夜流光相皎洁
-            </text>
-
-        </svg>
+        </div>
     </div>
+
 </body>
 </html>
