@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>七夕 · 我喜欢你</title>
     <style>
-        /* === 全局重置 & 基础 === */
+        /* === 全局重置 === */
         * {
             margin: 0;
             padding: 0;
@@ -14,23 +14,23 @@
 
         body {
             min-height: 100vh;
-            background: radial-gradient(ellipse at 30% 40%, #fcf4f7 0%, #f5e6ed 50%, #f0e0e8 100%);
+            background: radial-gradient(ellipse at 40% 30%, #fcf4f7 0%, #f5e6ed 60%, #f0e0e8 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            padding: 20px;
+            padding: 16px;
         }
 
-        /* === 卡片容器 — 纯CSS实现，无SVG === */
+        /* === 竖屏卡片容器 === */
         .card {
             width: 100%;
-            max-width: 1280px;
-            aspect-ratio: 16 / 9;
+            max-width: 460px;
+            aspect-ratio: 9 / 16;
             background: rgba(255, 245, 248, 0.55);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border-radius: 60px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 48px;
             border: 1.5px solid rgba(255, 220, 235, 0.5);
             box-shadow: 0 20px 60px rgba(180, 100, 130, 0.12);
             position: relative;
@@ -39,188 +39,185 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: clamp(20px, 4vw, 60px);
+            padding: clamp(16px, 4vw, 32px);
             transition: all 0.2s;
         }
 
-        /* === 背景装饰 — 纯CSS绘制 === */
-
-        /* 光晕 */
+        /* === 背景光晕 === */
         .card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 50% 50%, rgba(255, 150, 180, 0.15) 0%, transparent 70%);
+            background: radial-gradient(ellipse at 50% 40%, rgba(255, 150, 180, 0.15) 0%, transparent 70%);
             animation: glowPulse 5s ease-in-out infinite alternate;
             pointer-events: none;
             z-index: 0;
         }
-
         @keyframes glowPulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.05); opacity: 1; }
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.06); opacity: 1; }
         }
 
+        /* === 背景装饰 — 纯CSS === */
+
         /* 漂浮爱心 — 左上 */
-        .heart-float-1 {
+        .deco-heart-1 {
             position: absolute;
-            top: 6%;
-            left: 4%;
-            font-size: clamp(40px, 6vw, 80px);
+            top: 4%;
+            left: 3%;
+            font-size: clamp(32px, 7vw, 56px);
             opacity: 0.12;
             color: #f5a0b8;
-            animation: floatHeart1 20s ease-in-out infinite;
+            animation: floatDeco1 18s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
-        @keyframes floatHeart1 {
+        @keyframes floatDeco1 {
             0% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(20px, -30px) rotate(10deg); }
-            66% { transform: translate(-10px, 20px) rotate(-8deg); }
+            40% { transform: translate(12px, -24px) rotate(12deg); }
+            80% { transform: translate(-6px, 16px) rotate(-6deg); }
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         /* 漂浮爱心 — 右下 */
-        .heart-float-2 {
+        .deco-heart-2 {
             position: absolute;
-            bottom: 6%;
+            bottom: 4%;
             right: 3%;
-            font-size: clamp(50px, 8vw, 110px);
+            font-size: clamp(36px, 8vw, 64px);
             opacity: 0.10;
             color: #f7b8c8;
-            animation: floatHeart2 24s ease-in-out infinite;
+            animation: floatDeco2 22s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
-        @keyframes floatHeart2 {
+        @keyframes floatDeco2 {
             0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-25px, 15px) rotate(-12deg); }
+            50% { transform: translate(-16px, 12px) rotate(-10deg); }
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
-        /* 星星群 — 左 */
-        .stars-left {
+        /* 星星群 */
+        .deco-stars {
             position: absolute;
-            left: 6%;
-            top: 25%;
-            font-size: clamp(18px, 2.5vw, 36px);
-            color: #f7d0b0;
-            opacity: 0.15;
-            pointer-events: none;
-            z-index: 0;
-            animation: starSpin1 14s linear infinite;
-        }
-        @keyframes starSpin1 {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-
-        .stars-right {
-            position: absolute;
-            right: 6%;
-            top: 20%;
-            font-size: clamp(16px, 2.2vw, 32px);
+            font-size: clamp(14px, 2.8vw, 24px);
             color: #f7d0b0;
             opacity: 0.12;
             pointer-events: none;
             z-index: 0;
-            animation: starSpin2 16s linear infinite;
+            letter-spacing: 8px;
         }
-        @keyframes starSpin2 {
+        .deco-stars.top-left {
+            top: 14%;
+            left: 4%;
+            animation: spinStar1 14s linear infinite;
+        }
+        .deco-stars.top-right {
+            top: 10%;
+            right: 4%;
+            animation: spinStar2 16s linear infinite;
+        }
+        .deco-stars.bottom-left {
+            bottom: 18%;
+            left: 3%;
+            animation: spinStar1 18s linear infinite;
+        }
+        .deco-stars.bottom-right {
+            bottom: 14%;
+            right: 3%;
+            animation: spinStar2 20s linear infinite;
+        }
+        @keyframes spinStar1 {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes spinStar2 {
             0% { transform: rotate(0deg) scale(1); }
             50% { transform: rotate(-180deg) scale(1.15); }
             100% { transform: rotate(-360deg) scale(1); }
         }
 
         /* 云朵 */
-        .cloud-left {
+        .deco-cloud {
             position: absolute;
-            left: 5%;
-            top: 12%;
-            font-size: clamp(50px, 8vw, 120px);
-            color: rgba(255, 255, 255, 0.15);
-            pointer-events: none;
-            z-index: 0;
-            animation: cloudMove1 30s ease-in-out infinite;
-        }
-        @keyframes cloudMove1 {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(40px); }
-            100% { transform: translateX(0); }
-        }
-
-        .cloud-right {
-            position: absolute;
-            right: 5%;
-            bottom: 15%;
-            font-size: clamp(60px, 9vw, 140px);
+            font-size: clamp(40px, 10vw, 80px);
             color: rgba(255, 255, 255, 0.12);
             pointer-events: none;
             z-index: 0;
-            animation: cloudMove2 32s ease-in-out infinite;
+        }
+        .deco-cloud.top {
+            top: 6%;
+            left: 10%;
+            animation: cloudMove1 28s ease-in-out infinite;
+        }
+        .deco-cloud.bottom {
+            bottom: 8%;
+            right: 8%;
+            animation: cloudMove2 30s ease-in-out infinite;
+        }
+        @keyframes cloudMove1 {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+            100% { transform: translateX(0); }
         }
         @keyframes cloudMove2 {
             0% { transform: translateX(0); }
-            50% { transform: translateX(-30px); }
+            50% { transform: translateX(-24px); }
             100% { transform: translateX(0); }
         }
 
-        /* 花朵装饰 */
-        .flower-left {
+        /* 花朵 */
+        .deco-flower {
             position: absolute;
-            left: 8%;
-            bottom: 22%;
-            font-size: clamp(30px, 4vw, 60px);
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 0;
-            animation: flowerSway1 16s ease-in-out infinite;
-        }
-        @keyframes flowerSway1 {
-            0% { transform: rotate(-8deg) translate(0, 0); }
-            50% { transform: rotate(12deg) translate(8px, -10px); }
-            100% { transform: rotate(-8deg) translate(0, 0); }
-        }
-
-        .flower-right {
-            position: absolute;
-            right: 7%;
-            bottom: 30%;
-            font-size: clamp(28px, 3.8vw, 55px);
+            font-size: clamp(24px, 5vw, 40px);
             opacity: 0.10;
             pointer-events: none;
             z-index: 0;
-            animation: flowerSway2 19s ease-in-out infinite;
         }
-        @keyframes flowerSway2 {
+        .deco-flower.left {
+            left: 4%;
+            bottom: 28%;
+            animation: swayFlower1 16s ease-in-out infinite;
+        }
+        .deco-flower.right {
+            right: 4%;
+            top: 28%;
+            animation: swayFlower2 18s ease-in-out infinite;
+        }
+        @keyframes swayFlower1 {
+            0% { transform: rotate(-10deg) translate(0, 0); }
+            50% { transform: rotate(14deg) translate(6px, -8px); }
+            100% { transform: rotate(-10deg) translate(0, 0); }
+        }
+        @keyframes swayFlower2 {
             0% { transform: rotate(12deg) translate(0, 0); }
-            50% { transform: rotate(-10deg) translate(-6px, 12px); }
+            50% { transform: rotate(-12deg) translate(-5px, 10px); }
             100% { transform: rotate(12deg) translate(0, 0); }
         }
 
-        /* 小爱心散落 */
-        .heart-scatter {
+        /* 散落小爱心 */
+        .deco-scatter {
             position: absolute;
-            font-size: clamp(20px, 2.8vw, 40px);
+            font-size: clamp(14px, 2.5vw, 24px);
             opacity: 0.06;
             color: #f5a0b8;
             pointer-events: none;
             z-index: 0;
         }
-        .heart-scatter:nth-child(1) { top: 55%; left: 14%; animation: floatScatter1 15s ease-in-out infinite; }
-        .heart-scatter:nth-child(2) { top: 50%; right: 12%; animation: floatScatter2 17s ease-in-out infinite; }
-        .heart-scatter:nth-child(3) { bottom: 38%; left: 45%; animation: floatScatter3 19s ease-in-out infinite; }
-        .heart-scatter:nth-child(4) { top: 30%; left: 25%; animation: floatScatter4 13s ease-in-out infinite; }
-        .heart-scatter:nth-child(5) { bottom: 20%; right: 28%; animation: floatScatter5 21s ease-in-out infinite; }
+        .deco-scatter:nth-child(1) { top: 48%; left: 6%; animation: scatter1 15s ease-in-out infinite; }
+        .deco-scatter:nth-child(2) { top: 55%; right: 5%; animation: scatter2 17s ease-in-out infinite; }
+        .deco-scatter:nth-child(3) { top: 72%; left: 12%; animation: scatter3 19s ease-in-out infinite; }
+        .deco-scatter:nth-child(4) { top: 22%; right: 10%; animation: scatter4 13s ease-in-out infinite; }
+        .deco-scatter:nth-child(5) { top: 38%; left: 18%; animation: scatter5 21s ease-in-out infinite; }
 
-        @keyframes floatScatter1 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(12px,-18px) rotate(20deg); } 100% { transform: translate(0,0) rotate(0deg); } }
-        @keyframes floatScatter2 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-15px,20px) rotate(-15deg); } 100% { transform: translate(0,0) rotate(0deg); } }
-        @keyframes floatScatter3 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(18px,-12px) rotate(25deg); } 100% { transform: translate(0,0) rotate(0deg); } }
-        @keyframes floatScatter4 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-10px,16px) rotate(-20deg); } 100% { transform: translate(0,0) rotate(0deg); } }
-        @keyframes floatScatter5 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-14px) rotate(18deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes scatter1 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(10px,-14px) rotate(18deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes scatter2 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-12px,16px) rotate(-16deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes scatter3 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-10px) rotate(22deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes scatter4 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-8px,12px) rotate(-20deg); } 100% { transform: translate(0,0) rotate(0deg); } }
+        @keyframes scatter5 { 0% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(12px,-10px) rotate(15deg); } 100% { transform: translate(0,0) rotate(0deg); } }
 
-        /* === 内容区域 (z-index 高于装饰) === */
+        /* === 内容区域 === */
         .content {
             position: relative;
             z-index: 2;
@@ -231,7 +228,7 @@
             text-align: center;
             width: 100%;
             height: 100%;
-            gap: clamp(4px, 0.8vh, 12px);
+            gap: clamp(2px, 0.5vh, 8px);
         }
 
         /* === 顶部装饰 === */
@@ -239,11 +236,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: clamp(12px, 2vw, 28px);
+            gap: clamp(8px, 1.6vw, 18px);
             flex-wrap: wrap;
-            font-size: clamp(20px, 2.8vw, 44px);
-            opacity: 0.6;
-            margin-bottom: clamp(2px, 0.4vh, 8px);
+            font-size: clamp(16px, 2.8vw, 30px);
+            opacity: 0.5;
+            margin-bottom: clamp(2px, 0.3vh, 6px);
         }
         .top-ornaments .heart-icon {
             color: #f28aa8;
@@ -257,9 +254,9 @@
 
         /* === 主标题 === */
         .title-qixi {
-            font-size: clamp(40px, 8vw, 96px);
+            font-size: clamp(36px, 10vw, 72px);
             font-weight: 700;
-            letter-spacing: clamp(8px, 1.6vw, 20px);
+            letter-spacing: clamp(6px, 1.8vw, 14px);
             background: linear-gradient(135deg, #f5a0b8, #f7b8c8, #f0b0c0);
             background-size: 200% 200%;
             -webkit-background-clip: text;
@@ -267,7 +264,7 @@
             color: transparent;
             animation: titleShimmer 6s ease-in-out infinite alternate;
             line-height: 1.1;
-            text-shadow: 0 4px 40px rgba(240, 150, 180, 0.15);
+            text-shadow: 0 4px 40px rgba(240, 150, 180, 0.12);
         }
         @keyframes titleShimmer {
             0% { background-position: 0% 50%; }
@@ -276,24 +273,24 @@
 
         /* === 副标题 === */
         .sub-greeting {
-            font-size: clamp(12px, 1.4vw, 18px);
+            font-size: clamp(10px, 1.4vw, 15px);
             font-weight: 300;
             color: #b3889a;
             background: rgba(255, 220, 235, 0.30);
-            padding: clamp(4px, 0.6vh, 10px) clamp(16px, 3vw, 40px);
+            padding: clamp(4px, 0.5vh, 8px) clamp(14px, 3vw, 28px);
             border-radius: 80px;
             border: 1px solid rgba(255, 200, 215, 0.25);
-            letter-spacing: clamp(4px, 0.8vw, 10px);
+            letter-spacing: clamp(3px, 0.8vw, 8px);
             display: inline-block;
             backdrop-filter: blur(2px);
-            margin-bottom: clamp(2px, 0.3vh, 6px);
+            margin-bottom: clamp(2px, 0.2vh, 4px);
         }
 
         /* === 告白语 === */
         .confession {
-            font-size: clamp(36px, 6.5vw, 80px);
+            font-size: clamp(30px, 7.5vw, 56px);
             font-weight: 700;
-            letter-spacing: clamp(8px, 1.2vw, 16px);
+            letter-spacing: clamp(6px, 1.4vw, 12px);
             background: linear-gradient(135deg, #f58aa8, #f06a90, #e8557a);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -302,39 +299,39 @@
             animation: confessionGlow 3s ease-in-out infinite alternate;
             position: relative;
             display: inline-block;
-            text-shadow: 0 0 60px rgba(235, 80, 120, 0.1);
+            text-shadow: 0 0 60px rgba(235, 80, 120, 0.08);
         }
         @keyframes confessionGlow {
-            0% { background-position: 0% 50%; filter: drop-shadow(0 0 20px rgba(255, 59, 127, 0.15)); }
-            100% { background-position: 100% 50%; filter: drop-shadow(0 0 40px rgba(255, 59, 127, 0.25)); }
+            0% { background-position: 0% 50%; filter: drop-shadow(0 0 16px rgba(255, 59, 127, 0.12)); }
+            100% { background-position: 100% 50%; filter: drop-shadow(0 0 32px rgba(255, 59, 127, 0.20)); }
         }
 
-        /* 告白语两侧装饰 (纯CSS) */
+        /* 告白语两侧装饰 */
         .confession::before {
             content: '☁️';
             position: absolute;
-            left: clamp(-40px, -5vw, -70px);
-            top: clamp(-20px, -2vw, -30px);
-            font-size: clamp(24px, 3vw, 40px);
-            opacity: 0.35;
+            left: clamp(-32px, -5vw, -52px);
+            top: clamp(-14px, -2vw, -22px);
+            font-size: clamp(18px, 3vw, 30px);
+            opacity: 0.30;
             animation: cloudFloat 5s ease-in-out infinite alternate;
         }
         .confession::after {
             content: '🌸';
             position: absolute;
-            right: clamp(-44px, -5.5vw, -76px);
-            bottom: clamp(-16px, -2vw, -24px);
-            font-size: clamp(26px, 3.2vw, 44px);
-            opacity: 0.35;
+            right: clamp(-36px, -5.5vw, -58px);
+            bottom: clamp(-12px, -1.8vw, -18px);
+            font-size: clamp(20px, 3.2vw, 32px);
+            opacity: 0.30;
             animation: flowerFloat 6s ease-in-out infinite alternate;
         }
         @keyframes cloudFloat {
-            0% { transform: translateY(0) scale(0.9); opacity: 0.25; }
-            100% { transform: translateY(-12px) scale(1.1); opacity: 0.5; }
+            0% { transform: translateY(0) scale(0.9); opacity: 0.20; }
+            100% { transform: translateY(-10px) scale(1.1); opacity: 0.40; }
         }
         @keyframes flowerFloat {
-            0% { transform: rotate(-6deg) scale(0.9); opacity: 0.25; }
-            100% { transform: rotate(12deg) scale(1.1); opacity: 0.5; }
+            0% { transform: rotate(-6deg) scale(0.9); opacity: 0.20; }
+            100% { transform: rotate(12deg) scale(1.1); opacity: 0.40; }
         }
 
         /* === 爱心雨 === */
@@ -342,10 +339,10 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: clamp(8px, 1.2vw, 20px);
-            font-size: clamp(20px, 3vw, 42px);
-            margin: clamp(6px, 1vh, 16px) 0;
-            filter: drop-shadow(0 4px 20px rgba(255, 130, 170, 0.08));
+            gap: clamp(6px, 1vw, 14px);
+            font-size: clamp(16px, 3vw, 30px);
+            margin: clamp(4px, 0.6vh, 10px) 0;
+            filter: drop-shadow(0 4px 20px rgba(255, 130, 170, 0.06));
         }
         .falling-hearts span {
             display: inline-block;
@@ -361,25 +358,20 @@
         .falling-hearts span:nth-child(8) { animation-delay: 0.8s; }
 
         @keyframes heartFloat {
-            0% { transform: translateY(8px) scale(0.85) rotate(-6deg); opacity: 0.5; }
-            100% { transform: translateY(-14px) scale(1.1) rotate(8deg); opacity: 1; }
+            0% { transform: translateY(6px) scale(0.85) rotate(-6deg); opacity: 0.5; }
+            100% { transform: translateY(-12px) scale(1.1) rotate(8deg); opacity: 1; }
         }
 
         /* === 诗句卡片 === */
         .poem-card {
-            background: rgba(255, 240, 245, 0.40);
-            backdrop-filter: blur(4px);
-            border-radius: 80px;
-            padding: clamp(10px, 1.2vh, 18px) clamp(20px, 3vw, 40px);
-            border: 1px solid rgba(255, 200, 215, 0.2);
-            box-shadow: 0 8px 28px rgba(200, 140, 170, 0.04);
-            max-width: 92%;
-            margin: clamp(4px, 0.5vh, 10px) 0;
+
+            max-width: 94%;
+            margin: clamp(2px, 0.3vh, 6px) 0;
         }
         .poem-line {
-            font-size: clamp(14px, 1.6vw, 22px);
+            font-size: clamp(12px, 1.6vw, 17px);
             color: #7a5f6b;
-            letter-spacing: clamp(2px, 0.3vw, 4px);
+            letter-spacing: clamp(1px, 0.3vw, 3px);
             font-weight: 300;
             line-height: 1.6;
         }
@@ -391,9 +383,9 @@
         .poem-line small {
             display: block;
             margin-top: 2px;
-            font-size: clamp(10px, 1.1vw, 15px);
+            font-size: clamp(9px, 1vw, 12px);
             opacity: 0.6;
-            letter-spacing: clamp(3px, 0.4vw, 5px);
+            letter-spacing: clamp(2px, 0.4vw, 4px);
             color: #b28a98;
         }
 
@@ -402,21 +394,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: clamp(12px, 2vw, 30px);
+            gap: clamp(8px, 1.6vw, 20px);
             flex-wrap: wrap;
-            margin: clamp(4px, 0.5vh, 10px) 0;
+            margin: clamp(2px, 0.3vh, 6px) 0;
         }
         .lover-item {
             display: flex;
             align-items: center;
-            gap: clamp(6px, 0.8vw, 12px);
+            gap: clamp(4px, 0.6vw, 10px);
             background: rgba(255, 230, 240, 0.30);
-            padding: clamp(4px, 0.5vh, 8px) clamp(14px, 2vw, 28px);
+            padding: clamp(3px, 0.4vh, 6px) clamp(12px, 2vw, 22px);
             border-radius: 80px;
             border: 1px solid rgba(255, 200, 215, 0.15);
             backdrop-filter: blur(2px);
             color: #7a5f6b;
-            font-size: clamp(12px, 1.2vw, 18px);
+            font-size: clamp(10px, 1.2vw, 15px);
             transition: all 0.2s;
             cursor: default;
         }
@@ -425,13 +417,13 @@
             transform: scale(1.03);
         }
         .lover-item .emoji {
-            font-size: clamp(20px, 2.2vw, 34px);
+            font-size: clamp(16px, 2.2vw, 26px);
         }
         .lover-item.heart-bridge {
             background: transparent;
             border: none;
             padding: 0 clamp(4px, 0.6vw, 10px);
-            font-size: clamp(28px, 3vw, 48px);
+            font-size: clamp(22px, 3vw, 36px);
             color: #f28aa8;
             animation: pulseHeart 2.4s ease-in-out infinite;
             cursor: default;
@@ -446,16 +438,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: clamp(2px, 0.3vh, 6px);
-            margin-top: clamp(6px, 0.8vh, 16px);
+            gap: clamp(2px, 0.2vh, 4px);
+            margin-top: clamp(4px, 0.6vh, 10px);
         }
         .date-tag {
-            font-size: clamp(10px, 1vw, 14px);
+            font-size: clamp(9px, 0.9vw, 12px);
             color: #b58a98;
             background: rgba(255, 230, 240, 0.30);
-            padding: clamp(4px, 0.4vh, 8px) clamp(16px, 2.5vw, 32px);
+            padding: clamp(3px, 0.3vh, 6px) clamp(14px, 2vw, 24px);
             border-radius: 80px;
-            letter-spacing: clamp(3px, 0.4vw, 6px);
+            letter-spacing: clamp(2px, 0.4vw, 5px);
             border: 1px solid rgba(255, 200, 215, 0.15);
             backdrop-filter: blur(2px);
         }
@@ -464,62 +456,75 @@
             font-weight: 400;
         }
         .motto {
-            font-size: clamp(10px, 0.9vw, 13px);
+            font-size: 10px;
             color: #b3929e;
-            letter-spacing: clamp(3px, 0.4vw, 6px);
             opacity: 0.5;
             border-top: 1px solid rgba(200, 150, 170, 0.10);
-            padding-top: clamp(6px, 0.6vh, 12px);
-            width: 60%;
+            padding-top: clamp(4px, 0.4vh, 8px);
+            width: 70%;
             text-align: center;
         }
 
-        /* === 响应式：小屏微调 === */
-        @media (max-width: 640px) {
+        /* === 小屏设备微调 === */
+        @media (max-width: 400px) {
             .card {
                 border-radius: 32px;
-                padding: 16px;
+                padding: 12px;
             }
             .confession::before,
             .confession::after {
                 display: none;
             }
             .top-ornaments {
-                gap: 8px;
+                gap: 6px;
+                font-size: 14px;
             }
-            .lover-item .emoji {
-                font-size: 18px;
-            }
-            .lover-item.heart-bridge {
-                font-size: 24px;
-            }
-            .heart-scatter {
+            .deco-scatter {
                 display: none;
             }
-        }
-
-        @media (max-width: 420px) {
-            .card {
-                border-radius: 20px;
-                padding: 10px;
+            .deco-stars {
+                display: none;
             }
-            .sub-greeting {
-                letter-spacing: 2px;
-                padding: 4px 12px;
-                font-size: 10px;
+            .deco-flower {
+                display: none;
             }
-            .lovers {
-                gap: 6px;
-            }
-            .lover-item {
-                padding: 3px 10px;
-                font-size: 10px;
+            .deco-cloud {
+                display: none;
             }
             .lover-item .emoji {
                 font-size: 14px;
             }
             .lover-item.heart-bridge {
                 font-size: 18px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card {
+                border-radius: 24px;
+                padding: 10px;
+            }
+            .sub-greeting {
+                letter-spacing: 1px;
+                padding: 3px 10px;
+                font-size: 9px;
+            }
+            .lovers {
+                gap: 4px;
+            }
+            .lover-item {
+                padding: 2px 8px;
+                font-size: 9px;
+            }
+            .lover-item .emoji {
+                font-size: 12px;
+            }
+            .lover-item.heart-bridge {
+                font-size: 14px;
+            }
+            .falling-hearts {
+                gap: 4px;
+                font-size: 14px;
             }
         }
     </style>
@@ -531,27 +536,29 @@
         <!-- ===== 纯CSS背景装饰 ===== -->
 
         <!-- 漂浮爱心 -->
-        <div class="heart-float-1">❤️</div>
-        <div class="heart-float-2">💗</div>
+        <div class="deco-heart-1">❤️</div>
+        <div class="deco-heart-2">💗</div>
 
         <!-- 星星 -->
-        <div class="stars-left">✦ ✧ ✦</div>
-        <div class="stars-right">✦ ✧ ✦</div>
+        <div class="deco-stars top-left">✦ ✧</div>
+        <div class="deco-stars top-right">✧ ✦</div>
+        <div class="deco-stars bottom-left">✦ ✧</div>
+        <div class="deco-stars bottom-right">✧ ✦</div>
 
         <!-- 云朵 -->
-        <div class="cloud-left">☁️</div>
-        <div class="cloud-right">☁️</div>
+        <div class="deco-cloud top">☁️</div>
+        <div class="deco-cloud bottom">☁️</div>
 
         <!-- 花朵 -->
-        <div class="flower-left">🌸</div>
-        <div class="flower-right">🌺</div>
+        <div class="deco-flower left">🌸</div>
+        <div class="deco-flower right">🌺</div>
 
         <!-- 散落小爱心 -->
-        <div class="heart-scatter">💕</div>
-        <div class="heart-scatter">💗</div>
-        <div class="heart-scatter">💖</div>
-        <div class="heart-scatter">💝</div>
-        <div class="heart-scatter">💘</div>
+        <div class="deco-scatter">💕</div>
+        <div class="deco-scatter">💗</div>
+        <div class="deco-scatter">💖</div>
+        <div class="deco-scatter">💝</div>
+        <div class="deco-scatter">💘</div>
 
         <!-- ===== 主要内容 ===== -->
         <div class="content">
@@ -583,26 +590,187 @@
                 <span>💕</span>
                 <span>💝</span>
                 <span>💘</span>
-                <span>🌷</span>
             </div>
 
             <!-- 诗句 -->
             <div class="poem-card">
                 <div class="poem-line">
-                    <i>“ 两情若是久长时，又岂在朝朝暮暮。”</i>
-                    <small>—— 秦观 · 鹊桥仙</small>
+                    <i> 两情若是久长时，又岂在朝朝暮暮</i>
+                    <small>— 秦观 · 鹊桥仙— </small>
                 </div>
             </div>
 
-            <!-- 牛郎织女 -->
-            <div class="lovers">
-                <span class="lover-item">
-                    <span class="emoji">🐂</span> 牛郎
-                </span>
-                <span class="lover-item heart-bridge">🌉</span>
-                <span class="lover-item">
-                    <span class="emoji">🧚</span> 织女
-                </span>
+            <!-- ===== 牛郎织女 — 使用您提供的SVG ===== -->
+            <div class="lovers-svg-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 140" width="100%" height="100%" style="font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; overflow: visible;">
+                    <defs>
+                        <linearGradient id="boyGrad_s" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#b8a0b0"/>
+                            <stop offset="100%" stop-color="#8a7080"/>
+                        </linearGradient>
+                        <linearGradient id="girlGrad_s" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#e8a0b8"/>
+                            <stop offset="100%" stop-color="#c88098"/>
+                        </linearGradient>
+                        <radialGradient id="faceGrad_s" cx="50%" cy="40%" r="50%">
+                            <stop offset="0%" stop-color="#fff5f0"/>
+                            <stop offset="100%" stop-color="#f0ddd8"/>
+                        </radialGradient>
+                        <filter id="shadow_s" x="-10%" y="-10%" width="120%" height="120%">
+                            <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(120,80,100,0.15)"/>
+                        </filter>
+                    </defs>
+
+                    <!-- 牛郎 (左侧) -->
+                    <g transform="translate(80, 10)" filter="url(#shadow_s)">
+                        <!-- 背景光晕 -->
+                        <ellipse cx="0" cy="18" rx="60" ry="12" fill="rgba(180,140,160,0.06)"/>
+                        <!-- 身体 -->
+                        <path d="M-16,38 L-12,20 L-4,16 L4,16 L12,20 L16,38 L12,42 L-12,42 Z" fill="url(#boyGrad_s)" opacity="0.9"/>
+                        <path d="M-6,20 L-9,12 L9,12 L6,20" fill="none" stroke="#c0a8b8" stroke-width="1.2"/>
+                        <!-- 衣领 -->
+                        <path d="M-4,16 L0,12 L4,16 L0,20 Z" fill="#d4c0d0"/>
+                        <!-- 头部 -->
+                        <ellipse cx="0" cy="4" rx="14" ry="16" fill="url(#faceGrad_s)"/>
+                        <!-- 头发 -->
+                        <path d="M-14,0 Q-16,-8 -8,-12 Q-4,-14 0,-14 Q4,-14 8,-12 Q16,-8 14,0 Q8,-4 0,-4 Q-8,-4 -14,0 Z" fill="#5a4a50"/>
+                        <path d="M-10,-9 Q-6,-17 -2,-16 Q3,-14 6,-17 Q9,-9 6,-6 Q0,-9 -6,-6 Q-10,-9 -10,-9 Z" fill="#5a4a50"/>
+                        <!-- 发簪 -->
+                        <line x1="0" y1="-16" x2="0" y2="-22" stroke="#e8c8a0" stroke-width="1.5"/>
+                        <circle cx="0" cy="-22" r="2.5" fill="#e8c8a0"/>
+                        <!-- 眼睛 -->
+                        <ellipse cx="-4.5" cy="3" rx="2.5" ry="3" fill="#3a2a30"/>
+                        <ellipse cx="4.5" cy="3" rx="2.5" ry="3" fill="#3a2a30"/>
+                        <ellipse cx="-4" cy="2.5" rx="1" ry="1" fill="white"/>
+                        <ellipse cx="5" cy="2.5" rx="1" ry="1" fill="white"/>
+                        <!-- 眉毛 -->
+                        <path d="M-8,0 Q-5,-1.5 -3,0" fill="none" stroke="#4a3a40" stroke-width="1.2"/>
+                        <path d="M8,0 Q5,-1.5 3,0" fill="none" stroke="#4a3a40" stroke-width="1.2"/>
+                        <!-- 嘴巴 -->
+                        <path d="M-2.5,8 Q0,10.5 2.5,8" fill="none" stroke="#c07080" stroke-width="1.2"/>
+                        <!-- 腮红 -->
+                        <ellipse cx="-8" cy="6" rx="3" ry="2" fill="rgba(200,120,140,0.2)"/>
+                        <ellipse cx="8" cy="6" rx="3" ry="2" fill="rgba(200,120,140,0.2)"/>
+                        <!-- 手臂 -->
+                        <path d="M-10,22 Q-16,18 -14,13 Q-12,10 -11,13" fill="url(#faceGrad_s)" stroke="#d0b8c0" stroke-width="0.8"/>
+                        <path d="M10,22 Q16,18 14,13 Q12,10 11,13" fill="url(#faceGrad_s)" stroke="#d0b8c0" stroke-width="0.8"/>
+                        <!-- 飘带 -->
+                        <path d="M-12,28 Q-24,32 -20,44 Q-16,48 -14,40" fill="none" stroke="#c8a8b8" stroke-width="1.6" opacity="0.5">
+                            <animateTransform attributeName="transform" type="rotate" values="-2,0,32;2,0,32;-2,0,32" dur="3s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M12,28 Q24,32 20,44 Q16,48 14,40" fill="none" stroke="#c8a8b8" stroke-width="1.6" opacity="0.5">
+                            <animateTransform attributeName="transform" type="rotate" values="2,0,32;-2,0,32;2,0,32" dur="3.2s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- 标签 -->
+                        <rect x="-24" y="44" width="48" height="18" rx="9" fill="rgba(255,240,245,0.5)" stroke="rgba(255,200,215,0.2)" stroke-width="0.8"/>
+                        <text x="0" y="56" text-anchor="middle" font-size="11" fill="#7a5f6b" font-weight="400">牛郎</text>
+                    </g>
+
+                    <!-- 鹊桥 (中间) -->
+                    <g transform="translate(320, 8)">
+                        <!-- 桥体弧线 -->
+                        <path d="M-50,28 Q-25,8 0,4 Q25,8 50,28" fill="none" stroke="rgba(200,150,170,0.25)" stroke-width="16"/>
+                        <path d="M-50,28 Q-25,8 0,4 Q25,8 50,28" fill="none" stroke="rgba(220,180,200,0.35)" stroke-width="10"/>
+                        <path d="M-50,28 Q-25,8 0,4 Q25,8 50,28" fill="none" stroke="#f0d0d8" stroke-width="2.5"/>
+                        <!-- 桥上星星 -->
+                        <g>
+                            <animateTransform attributeName="transform" type="translate" values="0,0;0,-6;0,0" dur="2.5s" repeatCount="indefinite"/>
+                            <circle cx="-25" cy="10" r="3.5" fill="#f7d0b0" opacity="0.8"/>
+                            <circle cx="0" cy="4" r="4" fill="#f7d0b0" opacity="0.9"/>
+                            <circle cx="25" cy="10" r="3.5" fill="#f7d0b0" opacity="0.8"/>
+                        </g>
+                        <!-- 桥上爱心 -->
+                        <g>
+                            <animateTransform attributeName="transform" type="scale" values="1;1.15;1" dur="2s" repeatCount="indefinite" additive="sum"/>
+                            <path d="M-6,11 C-9,8 -10,5 -10,2 C-10,-1 -7,-3 -4.5,-3 C-3,-3 -1.5,-1.5 0,0 C1.5,-1.5 3,-3 4.5,-3 C7,-3 10,-1 10,2 C10,5 9,8 6,11 L0,17 Z" fill="#f28aa8" transform="translate(0,-6) scale(0.55)" opacity="0.7"/>
+                        </g>
+                        <!-- 喜鹊1 -->
+                        <g transform="translate(-16, -6)">
+                            <animateTransform attributeName="transform" type="translate" values="-16,-6;-14,-10;-16,-6" dur="3s" repeatCount="indefinite"/>
+                            <ellipse cx="0" cy="0" rx="6.5" ry="5" fill="#5a4a50"/>
+                            <circle cx="-4" cy="-1.5" r="3.5" fill="#4a3a40"/>
+                            <circle cx="-5.5" cy="-2.5" r="1.2" fill="white"/>
+                            <circle cx="-5.5" cy="-2.5" r="0.6" fill="#3a2a30"/>
+                            <path d="M-7,-1.5 L-9.5,-3 L-7,-2.5" fill="#e8c8a0"/>
+                            <path d="M3,0 Q6,-3 8,-1.5" fill="none" stroke="#5a4a50" stroke-width="1.2"/>
+                            <path d="M3,1.5 Q6,3 8,1.5" fill="none" stroke="#5a4a50" stroke-width="1.2"/>
+                        </g>
+                        <!-- 喜鹊2 -->
+                        <g transform="translate(16, -8)">
+                            <animateTransform attributeName="transform" type="translate" values="16,-8;14,-12;16,-8" dur="3.5s" repeatCount="indefinite"/>
+                            <ellipse cx="0" cy="0" rx="5.5" ry="4.5" fill="#5a4a50"/>
+                            <circle cx="-3.5" cy="-1.5" r="3" fill="#4a3a40"/>
+                            <circle cx="-5" cy="-2.5" r="1" fill="white"/>
+                            <circle cx="-5" cy="-2.5" r="0.5" fill="#3a2a30"/>
+                            <path d="M-6.5,-1.5 L-8.5,-3 L-6.5,-2" fill="#e8c8a0"/>
+                            <path d="M2.5,0 Q5,-2.5 6.5,-1" fill="none" stroke="#5a4a50" stroke-width="1"/>
+                            <path d="M2.5,1.5 Q5,2.5 6.5,1" fill="none" stroke="#5a4a50" stroke-width="1"/>
+                        </g>
+                    </g>
+
+                    <!-- 织女 (右侧) -->
+                    <g transform="translate(560, 10)" filter="url(#shadow_s)">
+                        <!-- 背景光晕 -->
+                        <ellipse cx="0" cy="18" rx="60" ry="12" fill="rgba(200,120,150,0.06)"/>
+                        <!-- 身体 -->
+                        <path d="M-14,38 L-10,20 L-2.5,16 L2.5,16 L10,20 L14,38 L10,42 L-10,42 Z" fill="url(#girlGrad_s)" opacity="0.9"/>
+                        <!-- 裙摆飘带 -->
+                        <path d="M-10,42 Q-16,46 -14,50 Q-11,54 -6,46" fill="rgba(200,120,150,0.25)">
+                            <animateTransform attributeName="transform" type="rotate" values="-2,0,42;2,0,42;-2,0,42" dur="3.5s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M10,42 Q16,46 14,50 Q11,54 6,46" fill="rgba(200,120,150,0.25)">
+                            <animateTransform attributeName="transform" type="rotate" values="2,0,42;-2,0,42;2,0,42" dur="3.8s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- 衣领 -->
+                        <path d="M-3,16 L0,11 L3,16 L0,21 Z" fill="#e8c8d8"/>
+                        <!-- 头部 -->
+                        <ellipse cx="0" cy="4" rx="13.5" ry="15" fill="url(#faceGrad_s)"/>
+                        <!-- 头发 -->
+                        <path d="M-13.5,-1.5 Q-15,-9.5 -6,-14 Q-2,-16 0,-16 Q2,-16 6,-14 Q15,-9.5 13.5,-1.5 Q8,-5 0,-5 Q-8,-5 -13.5,-1.5 Z" fill="#4a3a40"/>
+                        <!-- 发髻 -->
+                        <path d="M-6,-13 Q-4.5,-19 -1.5,-17.5 Q1.5,-16 4.5,-19 Q6,-13 3,-11 Q0,-12.5 -3,-11 Q-6,-13 -6,-13 Z" fill="#4a3a40"/>
+                        <!-- 发簪 -->
+                        <line x1="-1.5" y1="-17.5" x2="-6" y2="-24" stroke="#e8c8a0" stroke-width="1.5"/>
+                        <line x1="1.5" y1="-17.5" x2="6" y2="-24" stroke="#e8c8a0" stroke-width="1.5"/>
+                        <circle cx="-6" cy="-24" r="2" fill="#f0a0b0"/>
+                        <circle cx="6" cy="-24" r="2" fill="#f0a0b0"/>
+                        <!-- 头花 -->
+                        <circle cx="-3" cy="-21" r="2.5" fill="#fcc8d8"/>
+                        <circle cx="0" cy="-22.5" r="2.5" fill="#fcc8d8"/>
+                        <circle cx="3" cy="-21" r="2.5" fill="#fcc8d8"/>
+                        <!-- 眼睛 -->
+                        <ellipse cx="-4" cy="3" rx="2.8" ry="3.2" fill="#3a2a30"/>
+                        <ellipse cx="4" cy="3" rx="2.8" ry="3.2" fill="#3a2a30"/>
+                        <ellipse cx="-3.5" cy="2.5" rx="1.2" ry="1.2" fill="white"/>
+                        <ellipse cx="4.5" cy="2.5" rx="1.2" ry="1.2" fill="white"/>
+                        <ellipse cx="-4" cy="4" rx="0.6" ry="0.6" fill="white" opacity="0.5"/>
+                        <ellipse cx="4" cy="4" rx="0.6" ry="0.6" fill="white" opacity="0.5"/>
+                        <!-- 睫毛 -->
+                        <path d="M-7,0 Q-5.5,-0.8 -2.5,0.8" fill="none" stroke="#3a2a30" stroke-width="0.6"/>
+                        <path d="M7,0 Q5.5,-0.8 2.5,0.8" fill="none" stroke="#3a2a30" stroke-width="0.6"/>
+                        <!-- 眉毛 -->
+                        <path d="M-7,-0.8 Q-4.5,-2.5 -2.5,-0.8" fill="none" stroke="#4a3a40" stroke-width="1"/>
+                        <path d="M7,-0.8 Q4.5,-2.5 2.5,-0.8" fill="none" stroke="#4a3a40" stroke-width="1"/>
+                        <!-- 嘴巴 -->
+                        <path d="M-2.5,8 Q0,11 2.5,8" fill="none" stroke="#c07080" stroke-width="1.2"/>
+                        <!-- 腮红 -->
+                        <ellipse cx="-7" cy="6.5" rx="3.5" ry="2.5" fill="rgba(200,120,140,0.2)"/>
+                        <ellipse cx="7" cy="6.5" rx="3.5" ry="2.5" fill="rgba(200,120,140,0.2)"/>
+                        <!-- 手臂 -->
+                        <path d="M-8,22 Q-14,18 -13,13 Q-11,10 -10,13" fill="url(#faceGrad_s)" stroke="#d0b8c0" stroke-width="0.8"/>
+                        <path d="M8,22 Q14,18 13,13 Q11,10 10,13" fill="url(#faceGrad_s)" stroke="#d0b8c0" stroke-width="0.8"/>
+                        <!-- 飘带 -->
+                        <path d="M-11,28 Q-22,34 -18,48 Q-14,52 -13,44" fill="none" stroke="#e8b0c8" stroke-width="2" opacity="0.5">
+                            <animateTransform attributeName="transform" type="rotate" values="-2.5,0,32;2.5,0,32;-2.5,0,32" dur="3.3s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M11,28 Q22,34 18,48 Q14,52 13,44" fill="none" stroke="#e8b0c8" stroke-width="2" opacity="0.5">
+                            <animateTransform attributeName="transform" type="rotate" values="2.5,0,32;-2.5,0,32;2.5,0,32" dur="3.6s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- 标签 -->
+                        <rect x="-24" y="44" width="48" height="18" rx="9" fill="rgba(255,240,245,0.5)" stroke="rgba(255,200,215,0.2)" stroke-width="0.8"/>
+                        <text x="0" y="56" text-anchor="middle" font-size="11" fill="#7a5f6b" font-weight="400">织女</text>
+                    </g>
+                </svg>
             </div>
 
             <!-- 底部 -->
